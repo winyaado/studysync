@@ -339,7 +339,6 @@ CREATE TABLE `user_profiles` (
   `username` varchar(50) NOT NULL DEFAULT '名もなき猫',
   `created_at` datetime DEFAULT current_timestamp(),
   `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `profile_picture_url` varchar(255) NOT NULL DEFAULT 'default_avatar.jpg',
   `bio` text DEFAULT NULL,
   `active_identicon` text DEFAULT NULL,
   `identicon_slot_limit` int(11) NOT NULL DEFAULT 5

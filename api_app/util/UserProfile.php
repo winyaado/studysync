@@ -36,8 +36,8 @@ class UserProfile
     public function createDefaultProfile($userId)
     {
         $activeIdenticon = $this->generateDefaultIdenticonString();
-        $stmt = $this->pdo->prepare('INSERT INTO user_profiles (user_id, profile_picture_url, active_identicon) VALUES (?, ?, ?)');
-        $stmt->execute([$userId, DEFAULT_ICON_FILENAME, $activeIdenticon]);
+        $stmt = $this->pdo->prepare('INSERT INTO user_profiles (user_id, active_identicon) VALUES (?, ?)');
+        $stmt->execute([$userId, $activeIdenticon]);
         return $this->findByUserId($userId);
     }
 
@@ -86,23 +86,6 @@ class UserProfile
     }
 
     /**
-     * プロフィール画像URLを取得します。
-     * @param int $userId ユーザーID
-     * @return string 画像URL
-     */
-    public function getProfilePictureUrl($userId)
-    {
-        $profile = $this->findByUserId($userId);
-        $filename = DEFAULT_ICON_FILENAME;
-
-        if ($profile && !empty($profile['profile_picture_url'])) {
-            $filename = $profile['profile_picture_url'];
-        }
-
-        return APP_URL . ICON_DIR . $filename;
-    }
-
-    /**
      * ユーザー名を更新します。
      * @param int $userId ユーザーID
      * @param string $newUsername 新しいユーザー名
@@ -124,17 +107,5 @@ class UserProfile
     {
         $stmt = $this->pdo->prepare('UPDATE user_profiles SET bio = ? WHERE user_id = ?');
         return $stmt->execute([$newBio, $userId]);
-    }
-
-    /**
-     * プロフィール画像ファイル名を更新します。
-     * @param int $userId ユーザーID
-     * @param string $newPictureFilename 新しい画像ファイル名
-     * @return bool 更新結果
-     */
-    public function updateProfilePictureFilename($userId, $newPictureFilename)
-    {
-        $stmt = $this->pdo->prepare('UPDATE user_profiles SET profile_picture_url = ? WHERE user_id = ?');
-        return $stmt->execute([$newPictureFilename, $userId]);
     }
 }
