@@ -55,7 +55,7 @@ $typeLinkMap = ['ProblemSet' => '/read/problem.php?id=','Note' => '/read/note.ph
                                 <div class="row g-3 align-items-end">
                                     <div class="col-xl-4">
                                         <label for="searchQuery" class="form-label">キーワード</label>
-                                        <input type="text" class="form-control" id="searchQuery" name="q" value="<?= htmlspecialchars($searchQuery) ?>" placeholder="タイトル, 説明, 作成者...">
+                                        <input type="text" class="form-control" id="searchQuery" name="q" value="<?= htmlspecialchars($searchQuery, ENT_QUOTES, 'UTF-8') ?>" placeholder="タイトル, 説明, 作成者...">
                                     </div>
                                     <div class="col-xl-6">
                                         <?php require __DIR__ . '/parts/_lecture_selector.php'; ?>
