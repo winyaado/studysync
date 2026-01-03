@@ -1,0 +1,25 @@
+:root {
+    --bs-primary: #0a2540; /* note_2.html から持ってきた元の青色 */
+    --bs-primary-rgb: 10, 37, 64;
+    --bs-body-bg: #f0f2f5;
+}
+.login-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+.login-card {
+    max-width: 450px;
+    width: 100%;
+    border: none;
+    box-shadow: 0 0.5rem 1.5rem rgba(0,0,0,0.1);
+}
+.form-control:focus, .btn-primary:focus {
+    box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25);
+    border-color: rgba(var(--bs-primary-rgb), 0.5);
+}
+.btn-primary {
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+}

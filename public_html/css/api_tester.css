@@ -1,0 +1,33 @@
+/* 結果表示のスタイル */
+.result-card {
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+}
+.result-card .card-header {
+    font-weight: bold;
+}
+.result-card .badge {
+    font-size: 0.8rem;
+}
+.result-pass {
+    border-left: 5px solid var(--bs-success);
+}
+.result-fail {
+    border-left: 5px solid var(--bs-danger);
+}
+
+/* テストケースリスト項目をクリッカブルにする */
+#test-case-list .list-group-item-action {
+    cursor: pointer;
+}
+
+/* 詳細表示のフォントサイズを小さくする */
+.result-details {
+    font-family: var(--bs-font-monospace);
+    font-size: 0.8rem;
+    white-space: pre-wrap;
+    word-break: break-all;
+    background-color: #f8f9fa;
+    padding: 0.5rem;
+    border-radius: 4px;
+}

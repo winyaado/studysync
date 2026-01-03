@@ -1,0 +1,8 @@
+RewriteEngine On
+
+# root にアクセスしたら
+RewriteRule ^$ login.php [L]
+
+# api にアクセスしたら
+RewriteRule ^api/?$ /api/index.php [QSA,L]
+RewriteRule ^api/(.+)$ /api/index.php?route=$1 [QSA,L]

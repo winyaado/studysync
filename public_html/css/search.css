@@ -1,0 +1,10 @@
+/* 読み込みスピナーのスタイルを追加 */
+.spinner-border-sm {
+    width: 1rem;
+    height: 1rem;
+    border-width: .2em;
+}
+#results-container.loading {
+    opacity: 0.5;
+    pointer-events: none;
+}

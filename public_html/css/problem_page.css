@@ -1,0 +1,18 @@
+.clickable-row:hover { 
+    cursor: pointer; 
+    background-color: #f8f9fa; 
+}
+.rating-stars { 
+    font-size: 1.5rem; 
+    color: #ccc; 
+}
+.rating-stars .bi-star-fill, .rating-stars .bi-star { 
+    cursor: pointer; 
+}
+.rating-stars .bi-star-fill { 
+    color: #ffc107; 
+}
+.rating-widget.disabled .rating-stars .bi-star,
+.rating-widget.disabled .rating-stars .bi-star-fill { 
+    cursor: not-allowed; 
+}

@@ -1,0 +1,18 @@
+.editor-container {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    min-height: 200px;
+}
+.ql-toolbar.ql-snow {
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+.ql-container.ql-snow {
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    min-height: 150px;
+}
+#informations-list-table {
+    min-height: 100px; /* 読み込み中のプレースホルダー */
+}

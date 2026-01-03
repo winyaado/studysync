@@ -1,0 +1,71 @@
+/* 学習ページのメインコンテナ、flexレイアウトを有効にする */
+.study-page-container {
+    display: flex;
+    flex-direction: column;
+    /* ヘッダーの高さと下部のパディングに基づいてvh値を調整 */
+    height: calc(100vh - 120px); 
+}
+
+/* これにより、カードシーンが利用可能な垂直スペース全体を占めるようになる */
+.scene {
+    flex-grow: 1;
+    perspective: 1000px;
+    transform-style: preserve-3d;
+    min-height: 20rem; /* フォールバックの最小の高さ */
+}
+
+.flashcard {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.4s ease-out;
+}
+
+.flashcard.is-flipped {
+    transform: rotateY(180deg);
+}
+
+.card-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.25rem;
+    padding: 1.5rem;
+    text-align: center;
+    word-break: break-all;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.1);
+    border: 1px solid rgba(0,0,0,0.125);
+}
+
+.card-front {
+    background-color: #fff;
+    color: #212529; /* Bootstrap's default dark color */
+}
+
+.card-back {
+    background-color: #f8f9fa; /* Bootstrap's bg-light */
+    color: #212529; /* Bootstrap's default dark color */
+    transform: rotateY(180deg); /* 背面のレンダリングを修正するために再追加 */
+}
+
+/* 習熟度レベルの枠線にカスタムカラーを適用 */
+.flashcard.border-memory-0 { border: 4px solid #ef4444; }
+.flashcard.border-memory-1 { border: 4px solid #f59e0b; }
+.flashcard.border-memory-2 { border: 4px solid #22c55e; }
+
+.controls-wrapper {
+    flex-shrink: 0; /* コントロールが縮小するのを防ぐ */
+}
+
+/* キーボードヒントのスタイル */
+.controls-hint {
+    color: #6c757d; /* text-mutedクラスのスタイル */
+    font-size: 0.875rem;
+}
