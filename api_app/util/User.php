@@ -43,23 +43,35 @@ class User
     private function getTenantIdFromEmail(string $email): int
     {
         // メールアドレスからドメイン識別子を抽出
-        // 例: user@aaa.xxx.ac.jp -> xxx
-        // 例: user@example.com -> example
+        // 例: user@aaa.bbb.ccc.com -> bbb.ccc.com
+        // 例: user@aaa.bbb.co.jp -> aaa.bbb.co.jp
+        // 例: user@aaa.bbb.com -> aaa.bbb.com
+        // 例: user@bbb.com -> bbb.com
+
         $parts = explode('@', $email);
         $domain = $parts[1] ?? '';
-        $domainParts = explode('.', $domain);
 
         $domainIdentifier = '';
-        if (count($domainParts) > 2 && end($domainParts) === 'jp' && prev($domainParts) === 'ac') {
-            // .ac.jp の場合、その前の部分を識別子とする (例: aaa.xxx.ac.jp -> xxx)
-            $domainIdentifier = $domainParts[count($domainParts) - 3];
-        } elseif (count($domainParts) > 1) {
-            // それ以外の場合、最初のサブドメインを識別子とする (例: example.com -> example)
-            $domainIdentifier = $domainParts[0];
+        if (empty($domain)) {
+            $domainIdentifier = 'default';
+        } else {
+            $domainParts = explode('.', $domain);
+            $domainPartsCount = count($domainParts);
+            
+            // ドメインパーツが3つ以上の場合、末尾から3つを結合
+            if ($domainPartsCount >= 3) {
+                $domainIdentifier = implode('.', array_slice($domainParts, -3));
+            } elseif ($domainPartsCount == 2) {
+                // ドメインパーツが2つの場合、そのまま結合
+                $domainIdentifier = implode('.', $domainParts);
+            } else {
+                // ドメインパーツが1つの場合、そのまま
+                $domainIdentifier = $domain;
+            }
         }
-
+        
         if (empty($domainIdentifier)) {
-            // ドメイン識別子が特定できない場合は既定テナント扱い
+            // フォールバック
             $domainIdentifier = 'default';
         }
 
