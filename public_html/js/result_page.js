@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <h6 class="mb-1 fw-bold">問題 ${index + 1}</h6>
                         ${result.is_correct ? correctBadge : incorrectBadge}
                     </div>
-                    <p class="mb-2">${escapeHTML(result.question_text)}</p>
+                    <p class="mb-2">${nl2br(escapeHTML(result.question_text))}</p>
                     <small>あなたの回答: ${escapeHTML(result.user_answer_text)}</small><br>
                     ${!result.is_correct ? `<small class="text-success">正解: ${escapeHTML(result.correct_answer_text)}</small>${explanationHtml}` : explanationHtml}
                 </div>
