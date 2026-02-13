@@ -133,6 +133,9 @@ document.addEventListener('DOMContentLoaded', async function() {
         const questionCards = questionsContainer.querySelectorAll('.question-card');
         questionCards.forEach((card, index) => {
             card.querySelector('.question-title').textContent = `問題 ${index + 1}`;
+            card.querySelectorAll('.is-correct-radio').forEach(radio => {
+                radio.name = `correct_choice_group_${index}`;
+            });
         });
     }
 
