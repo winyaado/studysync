@@ -65,6 +65,16 @@ document.addEventListener('DOMContentLoaded', async function() {
         return String(str).replace(/[&<>'"]/g, match => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[match]);
     }
 
+    function encodeBase64Utf8(str) {
+        const bytes = new TextEncoder().encode(str);
+        let binary = '';
+        const chunkSize = 0x8000;
+        for (let i = 0; i < bytes.length; i += chunkSize) {
+            binary += String.fromCharCode(...bytes.subarray(i, i + chunkSize));
+        }
+        return btoa(binary);
+    }
+
     const quill = new Quill('#editor', {
         theme: 'snow',
         placeholder: 'ノートの内容をここに入力...',
@@ -194,7 +204,8 @@ document.addEventListener('DOMContentLoaded', async function() {
         if (isSizeExceeded) return;
 
         const formData = new FormData(this);
-        formData.set('content', JSON.stringify(quill.getContents()));
+        formData.set('content', encodeBase64Utf8(JSON.stringify(quill.getContents())));
+        formData.set('content_encoding', 'base64');
 
         const originalBtnText = submitBtn.innerHTML;
         submitBtn.disabled = true;

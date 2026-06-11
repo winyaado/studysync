@@ -30,6 +30,15 @@ $description = $_POST['description'] ?? null;
 $lectureId = isset($_POST['lecture_id']) && $_POST['lecture_id'] !== '' ? $_POST['lecture_id'] : null;
 $visibility = $_POST['visibility'] ?? 'private'; // 公開範囲。デフォルトは'private'。
 $noteContent = $_POST['content'] ?? ''; // Quill Delta形式のJSON文字列。デフォルトは空文字列。
+$contentEncoding = $_POST['content_encoding'] ?? '';
+
+if ($contentEncoding === 'base64') {
+    $decodedContent = base64_decode($noteContent, true);
+    if ($decodedContent === false) {
+        send_json_response(400, ['error' => 'ノートコンテンツのBase64復号に失敗しました。']);
+    }
+    $noteContent = $decodedContent;
+}
 
 // タイトルが最大長を超えていないか検証する。
 if (mb_strlen($title) > MAX_TITLE_LENGTH) {
@@ -54,10 +63,22 @@ if ($visibility === 'public' && (!isset($_SESSION['is_admin']) || !$_SESSION['is
     send_json_response(403, ['error' => '全体に公開する権限がありません。']);
 }
 
-// ノート内容が有効なJSON形式であるか検証する。
-json_decode($noteContent);
-if (json_last_error() !== JSON_ERROR_NONE) {
-    send_json_response(400, ['error' => '無効なノートコンテンツ形式です。']);
+// ノート内容をQuill Delta JSON形式に正規化する。
+$decodedNoteContent = json_decode($noteContent, true);
+if (json_last_error() === JSON_ERROR_NONE && is_array($decodedNoteContent) && isset($decodedNoteContent['ops']) && is_array($decodedNoteContent['ops'])) {
+    $noteContent = json_encode($decodedNoteContent, JSON_UNESCAPED_UNICODE);
+} else {
+    $fallbackText = $noteContent;
+    if (json_last_error() === JSON_ERROR_NONE && is_string($decodedNoteContent)) {
+        $fallbackText = $decodedNoteContent;
+    }
+    $fallbackText = preg_replace('/<(br|\/p|\/div|\/li|\/h[1-6])\b[^>]*>/i', "\n", $fallbackText);
+    $fallbackText = html_entity_decode(strip_tags($fallbackText), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    $fallbackText = str_replace(["\r\n", "\r"], "\n", $fallbackText);
+    if ($fallbackText === '' || substr($fallbackText, -1) !== "\n") {
+        $fallbackText .= "\n";
+    }
+    $noteContent = json_encode(['ops' => [['insert' => $fallbackText]]], JSON_UNESCAPED_UNICODE);
 }
 
 // --- 5. メイン処理 ---
