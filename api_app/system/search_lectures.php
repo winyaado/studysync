@@ -78,8 +78,8 @@ try {
 
     // 全てのWHERE句条件をANDで結合して最終的なWHERE句文字列を生成する。
     $where_sql = implode(' AND ', $where_conditions);
-    // 講義情報を取得するSQLクエリを組み立てる。講義コードで昇順にソートし、最大200件まで取得する。
-    $sql = "SELECT id, lecture_code, name, quarter FROM lectures WHERE $where_sql ORDER BY lecture_code ASC LIMIT 200";
+    // 講義情報を取得するSQLクエリを組み立てる。講義コードで昇順にソートし、最大1000件まで取得する。
+    $sql = "SELECT id, lecture_code, name, quarter FROM lectures WHERE $where_sql ORDER BY lecture_code ASC LIMIT 1000";
 
     // --- クエリ実行 ---
     // 組み立てたSQLとパラメータを使ってクエリを実行し、講義情報を取得する。
