@@ -1,4 +1,4 @@
-﻿/**
+/**
  * ファイル: public_html\js\note_editor.js
  * 使い道: ノートの作成・編集UIと送信処理を行います。
  * 定義されている関数:
@@ -79,6 +79,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         theme: 'snow',
         placeholder: 'ノートの内容をここに入力...',
         modules: {
+            table: true,
             toolbar: [
                 [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
                 ['bold', 'italic', 'underline', 'strike'],
@@ -90,6 +91,30 @@ document.addEventListener('DOMContentLoaded', async function() {
             ]
         },
     });
+
+    // <th> タグを太字付きセルとして処理するクリップボードマッチャー
+    const Delta = Quill.import('delta');
+    quill.clipboard.addMatcher('TH', (node, delta) => {
+        return delta.compose(new Delta().retain(delta.length(), { bold: true }));
+    });
+
+    // ペースト時に HTML 内の <th> / <thead> を <td> / <tbody> に正規化して表の構造を維持
+    quill.root.addEventListener('paste', function(e) {
+        const clipboardData = e.clipboardData || window.clipboardData;
+        if (!clipboardData) return;
+        const html = clipboardData.getData('text/html');
+        if (html && /<th[\s>]/i.test(html)) {
+            e.preventDefault();
+            const modifiedHtml = html
+                .replace(/<th([^>]*)>/gi, '<td$1><strong>')
+                .replace(/<\/th>/gi, '</strong></td>')
+                .replace(/<thead([^>]*)>/gi, '<tbody$1>')
+                .replace(/<\/thead>/gi, '</tbody>');
+
+            const range = quill.getSelection(true) || { index: quill.getLength(), length: 0 };
+            quill.clipboard.dangerouslyPasteHTML(range.index, modifiedHtml, 'user');
+        }
+    }, true);
 
     /**
      * getByteSize のデータを取得します。

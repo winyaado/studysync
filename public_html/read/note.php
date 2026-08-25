@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 $pageTitle = "ノート閲覧";
 require_once __DIR__ . '/../parts/_header.php';
 
@@ -27,6 +27,22 @@ $details = null;
     }
     #page-specific-content .ql-snow {
         border: none;
+    }
+    /* テーブルスタイル */
+    #page-specific-content .ql-editor table {
+        border-collapse: collapse;
+        width: 100%;
+        margin: 1rem 0;
+    }
+    #page-specific-content .ql-editor table td,
+    #page-specific-content .ql-editor table th {
+        border: 1px solid #dee2e6;
+        padding: 8px 12px;
+        vertical-align: top;
+    }
+    #page-specific-content .ql-editor table th {
+        background-color: #f8f9fa;
+        font-weight: bold;
     }
 </style>
 
@@ -65,7 +81,11 @@ $details = null;
 
             const contentId = details.id;
             const pageSpecificContent = document.getElementById('page-specific-content');
-            const hiddenQuill = new Quill('#hidden-converter');
+            const hiddenQuill = new Quill('#hidden-converter', {
+                modules: {
+                    table: true
+                }
+            });
 
             try {
                 const response = await fetch(`/api/content/get_note_for_edit?id=${contentId}`);

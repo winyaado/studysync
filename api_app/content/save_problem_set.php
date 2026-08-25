@@ -23,8 +23,9 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 // --- 4. パラメータの取得とバリデーション ---
 // POSTリクエストから各種パラメータを取得する。IDは整数にキャストし、空の場合はnullとする。
 $contentId = !empty($_POST['id']) ? (int)$_POST['id'] : null;
-// セッションから現在のユーザーIDを取得する。
+// セッションから現在のユーザーIDとテナントIDを取得する。
 $userId = $_SESSION['user_id'];
+$currentUserTenantId = $_SESSION['tenant_id'] ?? null;
 $title = $_POST['title'] ?? '';
 $description = $_POST['description'] ?? null;
 $lectureId = isset($_POST['lecture_id']) && $_POST['lecture_id'] !== '' ? $_POST['lecture_id'] : null;
@@ -85,6 +86,16 @@ try {
     // データベース接続を取得し、トランザクションを開始する。
     $pdo = get_pdo_connection();
     $pdo->beginTransaction();
+
+    // 講義IDが指定されている場合、自テナントに実在する講義コードであるかを検証する。
+    // これにより、未登録の任意文字列や他テナントの講義コードの混入を防ぐ。
+    if ($lectureId !== null) {
+        $stmt = $pdo->prepare("SELECT 1 FROM lectures WHERE lecture_code = ? AND tenant_id = ?");
+        $stmt->execute([$lectureId, $currentUserTenantId]);
+        if ($stmt->fetchColumn() === false) {
+            throw new Exception("指定された講義が見つかりません。", 400);
+        }
+    }
 
     $new_content_id = $contentId;
     $problemSetId = null; // problem_setsテーブルのID

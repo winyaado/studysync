@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <h5 class="mb-0">${escapeHTML(lectureGroup.lecture_name)}</h5>
                             ${flashcardsInLecture.length > 0 ? `
-                                <button class="btn btn-sm btn-outline-primary study-combined-btn" data-scope="lecture" data-lecture-id="${lectureId}" data-content-ids="${flashcardIdsInLecture.join(',')}">
+                                <button class="btn btn-sm btn-outline-primary study-combined-btn" data-scope="lecture" data-lecture-id="${escapeHTML(lectureId)}" data-content-ids="${flashcardIdsInLecture.join(',')}">
                                     <i class="bi bi-play-circle me-2"></i>この講義の単語帳で横断学習する
                                 </button>
                             ` : ''}

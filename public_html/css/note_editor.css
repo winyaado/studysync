@@ -14,3 +14,20 @@
     border-bottom-right-radius: 8px;
     min-height: 300px;
 }
+
+/* テーブルスタイル */
+.ql-editor table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1rem 0;
+}
+.ql-editor table td,
+.ql-editor table th {
+    border: 1px solid #dee2e6;
+    padding: 8px 12px;
+    vertical-align: top;
+}
+.ql-editor table th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+}
